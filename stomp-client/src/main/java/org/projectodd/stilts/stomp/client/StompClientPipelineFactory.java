@@ -84,7 +84,7 @@ public class StompClientPipelineFactory implements ChannelPipelineFactory {
 
         pipeline.addLast( "debug-client-mid", new DebugHandler( "CLIENT_MID" ) );
 
-        pipeline.addLast( "stomp-connection-negotiator", new StompConnectionNegotiator( clientContext, "localhost" ) );
+        pipeline.addLast( "stomp-connection-negotiator", new StompConnectionNegotiator( clientContext, "/" ) );
         pipeline.addLast( "stomp-client-receipt", new ClientReceiptHandler( clientContext ) );
 
         pipeline.addLast( "stomp-message-encoder", new StompMessageEncoder() );
