@@ -8,6 +8,7 @@ import org.jboss.netty.channel.ChannelStateEvent;
 import org.jboss.netty.channel.ChannelUpstreamHandler;
 import org.jboss.netty.channel.Channels;
 import org.jboss.netty.channel.MessageEvent;
+import org.jboss.netty.channel.UpstreamChannelStateEvent;
 import org.projectodd.stilts.stomp.client.StompClient.State;
 import org.projectodd.stilts.stomp.protocol.StompControlFrame;
 import org.projectodd.stilts.stomp.protocol.StompFrame;
@@ -35,6 +36,15 @@ public class StompDisconnectionNegotiator implements ChannelDownstreamHandler, C
                         return;
                     }
                 }
+            }
+        }
+        
+        if (e instanceof UpstreamChannelStateEvent) {
+            UpstreamChannelStateEvent stateEvent = (UpstreamChannelStateEvent)e;
+            if (stateEvent.getState() == ChannelState.CONNECTED && stateEvent.getValue() == null) {
+                ctx.sendDownstream(stateEvent);
+                this.clientContext.setConnectionState( State.DISCONNECTED );
+                return;
             }
         }
 
