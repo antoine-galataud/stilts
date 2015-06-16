@@ -10,9 +10,6 @@ dep.tree
 log
 tmp
 .loadpath
-.classpath
-.settings
-.project
 .idea
 *~
 package-cache
