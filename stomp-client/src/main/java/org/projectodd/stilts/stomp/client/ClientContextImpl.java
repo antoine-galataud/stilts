@@ -26,11 +26,11 @@ import org.projectodd.stilts.stomp.client.protocol.ClientContext;
 import org.projectodd.stilts.stomp.protocol.StompFrame.Version;
 
 class ClientContextImpl implements ClientContext {
-    
+
     ClientContextImpl(StompClient client) {
         this.client = client;
     }
-    
+
     @Override
     public InetSocketAddress getServerAddress() {
         return this.client.getServerAddress();
@@ -40,45 +40,60 @@ class ClientContextImpl implements ClientContext {
     public State getConnectionState() {
         return this.client.getConnectionState();
     }
-    
+
     @Override
     public Version getVersion() {
         return this.client.getVersion();
     }
-    
+
     @Override
     public boolean isSecure() {
-    	return this.client.isSecure();
+        return this.client.isSecure();
     }
 
     @Override
     public void setConnectionState(State connectionState) {
-        this.client.setConnectionState( connectionState );
+        this.client.setConnectionState(connectionState);
     }
 
     @Override
     public void setVersion(Version version) {
-        this.client.setVersion( version );
-    }    
-    
+        this.client.setVersion(version);
+    }
+
     @Override
     public void messageReceived(StompMessage message) {
-        this.client.messageReceived( message );
+        this.client.messageReceived(message);
     }
 
     @Override
     public void errorReceived(StompMessage message) {
-        this.client.errorReceived( message );
+        this.client.errorReceived(message);
     }
 
     @Override
     public void receiptReceived(String receiptId) {
-        this.client.receiptReceived( receiptId );
+        this.client.receiptReceived(receiptId);
     }
-    
+
     @Override
     public SSLContext getSSLContext() {
-    	return this.client.getSSLContext();
+        return this.client.getSSLContext();
+    }
+
+    @Override
+    public boolean isAuthenticated() {
+        return client.isAuthenticated();
+    }
+
+    @Override
+    public String getUsername() {
+        return client.getAuthenticationUser();
+    }
+
+    @Override
+    public String getPassword() {
+        return client.getAuthenticationPassword();
     }
 
     private StompClient client;
