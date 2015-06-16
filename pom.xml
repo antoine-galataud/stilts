@@ -16,15 +16,8 @@
   <url>http://www.jboss.org/</url>
 
   <description>
-    Stilts: The abstract STOMP server project.
+    Stilts: The abstract STOMP project (Java client only).
   </description>
-
-  <scm>
-    <connection>scm:git:git://github.com/projectodd/stilts.git</connection>
-    <developerConnection>scm:git:ssh://git@github.com/projectodd/stilts.git</developerConnection>
-    <url>${stilts.scm.url}</url>
-    <tag>HEAD</tag>
-  </scm>
 
   <developers>
     <developer>
@@ -449,16 +442,5 @@
     <module>stomp-api</module>
     <module>stomp-common</module>
     <module>stomp-client</module>
-    <module>stomp-client-js</module>
-    <module>stomp-client-rb</module>
-    <module>stomp-server-spi</module>
-    <module>stomp-server-core</module>
-    <module>conduit-server-spi</module>
-    <module>conduit-server-core</module>
-    <module>stomplet-api</module>
-    <module>stomplet-server-core</module>
-    <module>stomplet-server-bundle</module>
-    <module>stomplet-server-bundle-tests</module>
-    <module>stomplet-server-cdi</module>
   </modules>
 </project>
