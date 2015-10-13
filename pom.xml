@@ -10,25 +10,15 @@
 
   <groupId>org.projectodd.stilts</groupId>
   <artifactId>stilts</artifactId>
-  <version>0.1.41-SNAPSHOT</version>
+  <version>0.1.42-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>Stilts</name>
-  <url>http://www.jboss.org/</url>
 
   <description>
     Stilts: The abstract STOMP project (Java client only).
   </description>
 
-  <developers>
-    <developer>
-      <id>stilts-team</id>
-      <name>The Stilts Team</name>
-      <email>stilts-dev@projectodd.org</email>
-    </developer>
-  </developers>
-
   <properties>
-    <stilts.scm.url>http://github.com/projectodd/stilts</stilts.scm.url>
     <version.cobertura>2.5</version.cobertura>
     <version.el-api>2.2</version.el-api>
     <version.hamcrest>1.1</version.hamcrest>
