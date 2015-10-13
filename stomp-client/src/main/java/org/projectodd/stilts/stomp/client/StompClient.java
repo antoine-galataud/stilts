@@ -29,6 +29,7 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -356,13 +357,13 @@ public class StompClient {
     }
 
     ClientSubscription subscribe(SubscriptionBuilderImpl builder)
-            throws InterruptedException, ExecutionException {
+            throws InterruptedException, ExecutionException, TimeoutException {
         StompControlFrame frame = new StompControlFrame( Command.SUBSCRIBE,
                 builder.getHeaders() );
         String subscriptionId = getNextSubscriptionId();
         frame.setHeader( Header.ID, subscriptionId );
         ReceiptFuture future = sendFrame( frame );
-        future.await();
+        future.await(5, TimeUnit.SECONDS);
         if (future.isError()) {
             return null;
         } else {
