@@ -19,6 +19,8 @@ package org.projectodd.stilts.stomp.client;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import org.projectodd.stilts.stomp.StompMessage;
 
@@ -42,6 +44,11 @@ class ReceiptFuture {
     
     public StompMessage await() throws InterruptedException, ExecutionException {
         this.future.get();
+        return this.errorMessage;
+    }
+    
+    public StompMessage await(long timeout, TimeUnit unit) throws TimeoutException, InterruptedException, ExecutionException {
+        this.future.get(timeout, unit);
         return this.errorMessage;
     }
     

@@ -18,6 +18,7 @@ package org.projectodd.stilts.stomp.client;
 
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
+import java.util.concurrent.TimeoutException;
 
 import org.projectodd.stilts.stomp.DefaultHeaders;
 import org.projectodd.stilts.stomp.Headers;
@@ -82,6 +83,8 @@ class SubscriptionBuilderImpl implements SubscriptionBuilder {
         } catch (InterruptedException e) {
             throw new StompException( e );
         } catch (ExecutionException e) {
+            throw new StompException( e );
+        } catch (TimeoutException e) {
             throw new StompException( e );
         }
     }
