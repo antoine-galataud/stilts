@@ -54,7 +54,7 @@ public abstract class Handshake {
     }
 
     protected String getWebSocketLocation(HttpRequest request) {
-        return ( this.secure ? "wss" : "ws" ) + "://" + request.getHeader( HttpHeaders.Names.HOST ) + request.getUri();
+        return ( this.secure ? "wss" : "ws" ) + "://" + request.headers().get( HttpHeaders.Names.HOST ) + request.getUri();
     }
 
     public abstract boolean matches(HttpRequest request);

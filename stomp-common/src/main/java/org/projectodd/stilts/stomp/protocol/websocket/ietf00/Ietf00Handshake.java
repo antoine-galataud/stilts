@@ -34,8 +34,6 @@ import org.jboss.netty.handler.codec.http.HttpRequest;
 import org.jboss.netty.handler.codec.http.HttpResponse;
 import org.jboss.netty.handler.codec.http.HttpResponseStatus;
 import org.jboss.netty.handler.codec.http.HttpVersion;
-import org.jboss.netty.handler.codec.http.websocket.WebSocketFrameDecoder;
-import org.jboss.netty.handler.codec.http.websocket.WebSocketFrameEncoder;
 import org.projectodd.stilts.stomp.protocol.websocket.Handshake;
 
 /**
@@ -54,19 +52,19 @@ public class Ietf00Handshake extends Handshake {
     }
 
     public boolean matches(HttpRequest request) {
-        return (request.containsHeader( Names.SEC_WEBSOCKET_KEY1 ) && request.containsHeader( Names.SEC_WEBSOCKET_KEY2 ));
+        return (request.headers().contains( Names.SEC_WEBSOCKET_KEY1 ) && request.headers().contains( Names.SEC_WEBSOCKET_KEY2 ));
     }
     
     public HttpRequest generateRequest(URI uri) throws Exception {
         HttpRequest request = new DefaultHttpRequest( HttpVersion.HTTP_1_1, HttpMethod.GET, uri.toString() );
 
-        request.addHeader( HttpHeaders.Names.CONNECTION, "Upgrade" );
-        request.addHeader( HttpHeaders.Names.UPGRADE, "WebSocket" );
-        request.addHeader( HttpHeaders.Names.HOST, uri.getHost()+ ":" + uri.getPort() );
-        request.addHeader( HttpHeaders.Names.SEC_WEBSOCKET_PROTOCOL, "stomp" );
+        request.headers().add( HttpHeaders.Names.CONNECTION, "Upgrade" );
+        request.headers().add( HttpHeaders.Names.UPGRADE, "WebSocket" );
+        request.headers().add( HttpHeaders.Names.HOST, uri.getHost()+ ":" + uri.getPort() );
+        request.headers().add( HttpHeaders.Names.SEC_WEBSOCKET_PROTOCOL, "stomp" );
 
-        request.addHeader( HttpHeaders.Names.SEC_WEBSOCKET_KEY1, this.challenge.getKey1String() );
-        request.addHeader( HttpHeaders.Names.SEC_WEBSOCKET_KEY2, this.challenge.getKey2String() );
+        request.headers().add( HttpHeaders.Names.SEC_WEBSOCKET_KEY1, this.challenge.getKey1String() );
+        request.headers().add( HttpHeaders.Names.SEC_WEBSOCKET_KEY2, this.challenge.getKey2String() );
 
         ChannelBuffer buffer = ChannelBuffers.dynamicBuffer( 6 );
         buffer.writeBytes( challenge.getKey3() );
@@ -82,22 +80,22 @@ public class Ietf00Handshake extends Handshake {
     public HttpResponse generateResponse(HttpRequest request) throws Exception {
         HttpResponse response = new DefaultHttpResponse( HttpVersion.HTTP_1_1, new HttpResponseStatus( 101, "Web Socket Protocol Handshake - IETF-00" ) );
 
-        String origin = request.getHeader( Names.ORIGIN );
+        String origin = request.headers().get( Names.ORIGIN );
 
         if (origin != null) {
-            response.addHeader( Names.SEC_WEBSOCKET_ORIGIN, request.getHeader( Names.ORIGIN ) );
+            response.headers().add( Names.SEC_WEBSOCKET_ORIGIN, request.headers().get( Names.ORIGIN ) );
         }
-        response.addHeader( Names.SEC_WEBSOCKET_LOCATION, getWebSocketLocation( request ) );
+        response.headers().add( Names.SEC_WEBSOCKET_LOCATION, getWebSocketLocation( request ) );
 
-        String protocol = request.getHeader( Names.SEC_WEBSOCKET_PROTOCOL );
+        String protocol = request.headers().get( Names.SEC_WEBSOCKET_PROTOCOL );
 
         if (protocol != null) {
-            response.addHeader( Names.SEC_WEBSOCKET_PROTOCOL, protocol );
+            response.headers().add( Names.SEC_WEBSOCKET_PROTOCOL, protocol );
         }
 
         // Calculate the answer of the challenge.
-        String key1 = request.getHeader( Names.SEC_WEBSOCKET_KEY1 );
-        String key2 = request.getHeader( Names.SEC_WEBSOCKET_KEY2 );
+        String key1 = request.headers().get( Names.SEC_WEBSOCKET_KEY1 );
+        String key2 = request.headers().get( Names.SEC_WEBSOCKET_KEY2 );
         byte[] key3 = new byte[8];
         request.getContent().readBytes( key3 );
         
