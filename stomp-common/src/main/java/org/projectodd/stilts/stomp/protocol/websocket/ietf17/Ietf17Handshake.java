@@ -62,19 +62,19 @@ public class Ietf17Handshake extends Handshake {
     }
 
     public boolean matches(HttpRequest request) {
-        return (request.containsHeader( "Sec-WebSocket-Key" ) && getVersion().equals( request.getHeader( "Sec-WebSocket-Version" ) ));
+        return (request.headers().contains( "Sec-WebSocket-Key" ) && getVersion().equals( request.headers().get( "Sec-WebSocket-Version" ) ));
     }
 
     public HttpRequest generateRequest(URI uri) throws Exception {
         HttpRequest request = new DefaultHttpRequest( HttpVersion.HTTP_1_1, HttpMethod.GET, uri.getPath() );
 
-        request.addHeader( "Sec-WebSocket-Version", getVersion() );
-        request.addHeader( HttpHeaders.Names.CONNECTION, "Upgrade" );
-        request.addHeader( HttpHeaders.Names.UPGRADE, "WebSocket" );
-        request.addHeader( HttpHeaders.Names.HOST, uri.getHost()+ ":" + uri.getPort() );
-        request.addHeader( HttpHeaders.Names.SEC_WEBSOCKET_PROTOCOL, "stomp" );
+        request.headers().add( "Sec-WebSocket-Version", getVersion() );
+        request.headers().add( HttpHeaders.Names.CONNECTION, "Upgrade" );
+        request.headers().add( HttpHeaders.Names.UPGRADE, "WebSocket" );
+        request.headers().add( HttpHeaders.Names.HOST, uri.getHost()+ ":" + uri.getPort() );
+        request.headers().add( HttpHeaders.Names.SEC_WEBSOCKET_PROTOCOL, "stomp" );
 
-        request.addHeader( "Sec-WebSocket-Key", this.challenge.getNonceBase64() );
+        request.headers().add( "Sec-WebSocket-Key", this.challenge.getNonceBase64() );
         request.setContent( ChannelBuffers.EMPTY_BUFFER );
 
         return request;
@@ -84,23 +84,23 @@ public class Ietf17Handshake extends Handshake {
     public HttpResponse generateResponse(HttpRequest request) throws Exception {
         HttpResponse response = new DefaultHttpResponse( HttpVersion.HTTP_1_1, new HttpResponseStatus( 101, "Web Socket Protocol Handshake - IETF-07" ) );
 
-        String origin = request.getHeader( Names.ORIGIN );
+        String origin = request.headers().get( Names.ORIGIN );
 
         if (origin != null) {
-            response.addHeader( Names.ORIGIN, origin );
+            response.headers().add( Names.ORIGIN, origin );
         }
-        response.addHeader( Names.SEC_WEBSOCKET_LOCATION, getWebSocketLocation( request ) );
+        response.headers().add( Names.SEC_WEBSOCKET_LOCATION, getWebSocketLocation( request ) );
 
-        String protocol = request.getHeader( Names.SEC_WEBSOCKET_PROTOCOL );
+        String protocol = request.headers().get( Names.SEC_WEBSOCKET_PROTOCOL );
 
         if (protocol != null) {
-            response.addHeader( Names.SEC_WEBSOCKET_PROTOCOL, protocol );
+            response.headers().add( Names.SEC_WEBSOCKET_PROTOCOL, protocol );
         }
 
-        String key = request.getHeader( "Sec-WebSocket-Key" );
+        String key = request.headers().get( "Sec-WebSocket-Key" );
         String solution = Ietf07WebSocketChallenge.solve( key );
 
-        response.addHeader( "Sec-WebSocket-Accept", solution );
+        response.headers().add( "Sec-WebSocket-Accept", solution );
         response.setChunked( false );
 
         return response;
@@ -109,7 +109,7 @@ public class Ietf17Handshake extends Handshake {
     @Override
     public boolean isComplete(HttpResponse response) throws Exception {
         log.debugf( "COMPLETE? " + response );
-        String challengeResponse = response.getHeader( "Sec-WebSocket-Accept" );
+        String challengeResponse = response.headers().get( "Sec-WebSocket-Accept" );
         return this.challenge.verify( challengeResponse );
     }
 

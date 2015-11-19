@@ -35,7 +35,7 @@ public class HttpStompFrameDecoder extends OneToOneDecoder {
     @Override
     protected Object decode(ChannelHandlerContext ctx, Channel channel, Object msg) throws Exception {
         if (msg instanceof HttpMessage) {
-            String contentType = ((HttpMessage) msg).getHeader( "content-type" );
+            String contentType = ((HttpMessage) msg).headers().get( "content-type" );
             if (contentType != null) {
                 int semiLoc = contentType.indexOf( ";" );
                 if (semiLoc > 0) {

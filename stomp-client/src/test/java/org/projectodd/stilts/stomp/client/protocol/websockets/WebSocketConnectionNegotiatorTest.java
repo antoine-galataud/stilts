@@ -39,10 +39,10 @@ public class WebSocketConnectionNegotiatorTest {
         HttpRequest result = (HttpRequest) handler.poll();
         assertNotNull( result );
 
-        String key1 = result.getHeader( HttpHeaders.Names.SEC_WEBSOCKET_KEY1 );
+        String key1 = result.headers().get( HttpHeaders.Names.SEC_WEBSOCKET_KEY1 );
         assertNotNull( key1 );
 
-        String key2 = result.getHeader( HttpHeaders.Names.SEC_WEBSOCKET_KEY2 );
+        String key2 = result.headers().get( HttpHeaders.Names.SEC_WEBSOCKET_KEY2 );
         assertNotNull( key2 );
 
         assertEquals( 10, result.getContent().readableBytes() );
@@ -79,10 +79,10 @@ public class WebSocketConnectionNegotiatorTest {
         HttpRequest result = (HttpRequest) handler.poll();
         assertNotNull( result );
 
-        String key1 = result.getHeader( HttpHeaders.Names.SEC_WEBSOCKET_KEY1 );
+        String key1 = result.headers().get( HttpHeaders.Names.SEC_WEBSOCKET_KEY1 );
         assertNotNull( key1 );
 
-        String key2 = result.getHeader( HttpHeaders.Names.SEC_WEBSOCKET_KEY2 );
+        String key2 = result.headers().get( HttpHeaders.Names.SEC_WEBSOCKET_KEY2 );
         assertNotNull( key2 );
 
         assertEquals( 10, result.getContent().readableBytes() );

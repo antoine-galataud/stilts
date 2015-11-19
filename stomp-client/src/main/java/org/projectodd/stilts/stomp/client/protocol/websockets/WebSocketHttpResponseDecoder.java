@@ -71,7 +71,7 @@ public class WebSocketHttpResponseDecoder extends ReplayingDecoder<VoidEnum> {
                 String name = line.substring( 0, colonLoc ).trim().toLowerCase();
                 String value = line.substring( colonLoc + 1 ).trim();
 
-                response.addHeader( name, value );
+                response.headers().add( name, value );
             }
 
             nonNewlineBytes = buffer.bytesBefore( (byte) '\n' );
