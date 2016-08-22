@@ -340,11 +340,12 @@ public class StompClient {
                     this.executor = null;
                     this.destroyExecutor = false;
                 }
+                
+                this.bootstrap.shutdown();
+                this.bootstrap.releaseExternalResources();
+                this.bootstrap = null;
             }
         }
-        this.bootstrap.shutdown();
-        this.bootstrap.releaseExternalResources();
-        this.bootstrap = null;
     }
 
     public SubscriptionBuilder subscribe(String destination) {
